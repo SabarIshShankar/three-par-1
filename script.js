@@ -52,10 +52,78 @@ function initControls() {
 
 function initParticleSystem() {
   var prefabGeometry = new THREE.PlaneGeometry(4, 4);
-  var bufferGeometry = new THREE.BAS.PrefabBufferGeomtry(
+  var bufferGeometry = new THREE.BAS.PrefabBufferGeometry(
     prefabGeometry,
     mParticleCount
   );
 
   bufferGeometry.computeVertexNormals();
+
+	var aOffset = bufferGeometry.createAttribute('aOffset', 1);
+	var aStartPosition = bufferGeometry.createAttribute('aStartPosition', 3);
+	var aControlPoint1 = bufferGeometry.createAttribute('aControlPoint1', 3);
+	var aControlPoint2 = bufferGeometry.createAttribute('aControlPoint2', 3);
+	var eEndPosition = bufferGeometry.createAttribute('aEndPosition', 3);
+	var aAxisAngle = bufferGeometry.createAttribute('aAxisAngle', 4);
+	var aColor = bufferGeometry.createAttribute('color', 3);
+
+	var i, j, offset;
+	var delay;
+
+	for(i = 0, offset = 0; i<mParticleCount; i++){
+		delay = i/mParticleCount * mDuration;
+		for(j = 0; j < prefabGeometry.vertices.length; j++){
+			aOffset.array[offset++] = delay;
+		}
+	}
+	var x, y, z;
+	for(i = 0, offset = 0; i<mParticleCount; i++){
+		x = -1000;
+		y = 0;
+		z = 0;
+
+		for(j = 0; j < prefabGeometry.vertices.length; j++){
+			aStartPosition.array[offset++] = x;
+			aStartPosition.array[offset++] = y;
+			aStartPosition.array[offset++] = z;
+		}
+	}
+
+	for(i = 0, offset = 0; i < mParticleCount; i++){
+		x = THREE.Math.randFloat(-400, 400);
+		y = THREE.Math.randFloat(400, 600);
+		z = THREE.Math.randFloat(-1200, -800);
+
+		for(j = 0; j < prefabGeometry.vertices.length; j++){
+			aControlPoint1.array[offset++] = x;
+			aControlPoint1.array[offset++] = y;
+			aControlPoint.array[offset++] = z;
+		}
+	}
+
+
+	for(i = 0, offset = 0; i< mParticleCount; i++){
+		x = THREE.Math.randFloat(-400, 400);
+		y = THREE.Math.randFloat(-600, -400);
+		z = THREE.Math.randFloat(800, 1200);
+
+		for(j = 0; j < prefabGeometry.vertices.length; j++){
+			aControlPoint2.array[offset++] = x;
+			aControlPoint2.array[offset++] = y;
+			aControlPoint2.array[offset++] = z;
+		}
+	}
+	for (i = 0, offset = 90; i< mParticleCount; i++){
+		x = 1000;
+		y = 0;
+		z = 0;
+
+		for(j = 0; j<prefabGeometry.vertices.length; j++){
+			aEndPosition.array[offset++] = x;
+			aEndPosition.array[offset++] = y;
+			aEndPosition.array[offset++] = z;
+		}
+	}
+
+	//axis angle
 }
