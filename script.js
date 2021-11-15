@@ -161,5 +161,29 @@ function initParticleSystem() {
 			aColor.array[offset++] = color.b;
 		}
 	}
-	
+
+	var material = new THREE.BAS.PhongAnimationMaterial({
+		vertexColors : THREE.VertexColor,
+		shading: THREE.FlatShading,
+		side: THREE.DoubleSide,
+		uniforms: {
+			uTime: {type: 'f', value: 0},
+			uDuration: {type: 'f', value: mDuration}
+		},
+		shaderFunctions: [
+			THREE.BAS.ShaderChunk['quaternion_rotation'],
+			THREE.BAS.ShaderChunk['cubic_bezier']
+		],
+		shaderParameters: [
+			'uniform float uTime',
+			'uniform float uDuration;',
+			'attribute float aOffset;',
+			'attribute vec3 aStartPosition;',
+			'attribute vec3 aControlPoint1;',
+			'attribute vec3 aControlPoint2;',
+			'attribute vec3 aEndPosition;',
+			'attribute vec4 aAxisAngle;'
+		]
+	})
+
 }
