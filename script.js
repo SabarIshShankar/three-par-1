@@ -126,4 +126,15 @@ function initParticleSystem() {
 	}
 
 	//axis angle
+	var axis = new THREE.Vector3();
+	var angle = 0;
+
+	for(i = 0, offset = 0; i< mParticleCount; i++){
+		axis.x = THREE.Math.randFloatSpread(2);
+		axis.y = THREE.Math.randFloatSpread(2);
+		axis.z = THREE.Math.randFloatSpread(2);
+		axis.normalize();
+
+		angle = Math.PI * THREE.Math.randInt(16, 32);
+	}
 }
