@@ -220,3 +220,18 @@ function update(){
 	mControls.update();
 	mParticleSystem.material.uniforms['uTime'].value = mTime;
 }
+function render(){
+	mRenderer.render(mScene, mCamera);
+}
+
+function resize(){
+	mCamera.aspect = window.innerWidth / window.innerHeight;
+	mCamera.updateProjectionMatrix();
+	mRenderer.setSize(window.innerWidth, window.innerHeight);
+}
+
+THREE.BAS = {};
+THREE.BAS.ShaderChunk = {};
+
+THREE.BAS.ShaderChunk["animation_time"] = "float tDelay = aAnimation.x;\nfloat tduration = aAnimation.y\nfloat tTime = clamp(uTime - tDelay, 0.0, tDuration);\nfloat tProgress = ease(tTime, 0.0, 1.0, tDuration);\n";
+
