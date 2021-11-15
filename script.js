@@ -183,7 +183,40 @@ function initParticleSystem() {
 			'attribute vec3 aControlPoint2;',
 			'attribute vec3 aEndPosition;',
 			'attribute vec4 aAxisAngle;'
+		],
+		shaderVertexInit: [
+			'float tProgress = mod((uTime + aOffset), uDuration)/uDuration;',
+			'float angle = aAxisAngle.w * tProgress;',
+			'vec4 tQuat = quatFromAxisAngle(aAxisAngle.xyz, angle);'
+		],
+		shaderTransformNormal: [
+			'objectNormal = rotateVector(tQuat, objectNormal);'
+		],
+		shaderTransformPosition: [
+			'transformed = rotateVector(tQuat, transformed);',
+			'transformed += cubicBezier(aStartPosition, aControlPoint1, aControlPoint2, aEndPosition, tProgress);'
 		]
-	})
+	}, {
+		specular: 0xff0000,
+		shininess: 20
+	});
 
+	mParticleSystem = new THREE.Mesh(bufferGeomtry, material);
+	mParticleSystem.frustumCalled = false;
+	mScene.add(mParticleSystem);
+}
+
+function tick(){
+	update();
+	render();
+
+	mTime += mTimeStep;
+	mTime %= mDuration;
+
+	requestAnimationFrame(tick);
+}
+
+function update(){
+	mControls.update();
+	mParticleSystem.material.uniforms['uTime'].value = mTime;
 }
