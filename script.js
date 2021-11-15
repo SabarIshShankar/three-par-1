@@ -136,5 +136,30 @@ function initParticleSystem() {
 		axis.normalize();
 
 		angle = Math.PI * THREE.Math.randInt(16, 32);
+
+		for(j = 0; j < prefabGeometry.vertices.length; j++){
+			aAxisAngle.array[offset++] = axis.x;
+			aAxisAngle.array[offset++] = axis.y;
+			aAxisAngle.array[offset++] = axis.z;
+			aAxisAngle.array[offset++] = angle;
+		}
 	}
+
+	var color = new THREE.Color();
+	var h, s, l;
+
+	for(i = 0; offset = 0; i<mParticleCount; i++){
+		h = i/mParticleCount;
+		s = THREE.Math.randFloat(0.4, 0.6);
+		l = THREE.Math.randFloat(0.4, 0.6);
+
+		color.setHSL(h, s, l);
+
+		for(j = 0; j< prefabGeometry.vertices.length; j++){
+			aColor.array[offset++] = color.r;
+			aColor.array[offset++] = color.g;
+			aColor.array[offset++] = color.b;
+		}
+	}
+	
 }
