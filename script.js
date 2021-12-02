@@ -296,4 +296,22 @@ THREE.BAS.PrefabBufferGeometry.prototype.bufferDefaults = function () {
   var positionBuffer = new Float32Array(
     this.prefabCount * prefabVertexCount * 3
   );
+
+  this.setIndex(new THREE.BufferAttribute(indexBuffer, 1));
+  this.addAttribute("position", new THREE.BufferAttribute(positionBuffer, 3));
+
+  for (var i = 0, offset; i < this.prefabCount; i++) {
+    for (var j = 0; j < prefabVertexCount; j++, offset += 3) {
+      var prefabVertex = this.prefabGeometry.vertices[j];
+
+      positionBuffer[offset] = prefabVertex.x;
+      positionBuffer[offset + 1] = prefabVertex.y;
+      positionBuffer[offset + 2] = prefabVertex.z;
+    }
+
+    for (var k = 0; k < prefabIndexCount; k++) {
+      indexBuffer[i * prefabIndexCount + k] =
+        prefabIndices[k] + i * prefabVertexCount;
+    }
+  }
 };
