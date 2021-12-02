@@ -274,3 +274,14 @@ THREE.BAS.PrefabBufferGeometry = function (prefab, count) {
   this.prefabVertexCount = prefab.vertices.length;
   this.bufferDefaults();
 };
+
+THREE.BAS.PrefabBufferGeometry.prototype = Object.create(
+  THREE.BufferGeometry.prototype
+);
+THREE.BAS.PrefabBufferGeometry.prototype.constructor =
+  THREE.BAS.PrefabBufferGeometry;
+
+THREE.BAS.PrefabBufferGeometry.prototype.bufferDefaults = function () {
+  var prefabFaceCount = this.prefabGeometry.faces.length;
+  var prefabIndexCount = this.prefabGeometry.face.length * 3;
+};
