@@ -329,4 +329,13 @@ THREE.BAS.PrefabBufferGeometry.prototype.bufferUvs = function () {
     prefabUvs[face.b] = uv[1];
     prefabUvs[face.c] = uv[2];
   }
+
+  var uvBuffer = this.createAttribute("uv", 2);
+  for (var i = 0, offset = 0; i < this.prefabCount; i++) {
+    for (var j = 0; j < prefabVertexCount; j++, offset += 2) {
+      var prefabUv = prefabUvs[j];
+      uvBuffer.array[offset] = prefabUv.x;
+      uvBuffer.array[offset + 1] = prefabUv.y;
+    }
+  }
 };
