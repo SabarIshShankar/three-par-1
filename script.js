@@ -365,4 +365,14 @@ THREE.BAS.PrefabBufferGeometry.prototype.computerVertexNormals = function () {
 
   var indices = index.array;
   var prefabIndexCount = this.prefabGeometry.faces.length * 3;
+
+  for (var i = 0; i < prefabIndexCount; i += 3) {
+    vA = indices[i + 0] * 3;
+    vB = indices[i + 1] * 3;
+    vC = indices[i + 2] * 3;
+
+    pA.fromArray(positions, vA);
+    pB.fromArray(positions, vB);
+    pC.fromArray(positions, vC);
+  }
 };
