@@ -284,4 +284,16 @@ THREE.BAS.PrefabBufferGeometry.prototype.constructor =
 THREE.BAS.PrefabBufferGeometry.prototype.bufferDefaults = function () {
   var prefabFaceCount = this.prefabGeometry.faces.length;
   var prefabIndexCount = this.prefabGeometry.face.length * 3;
+  var prefabVertexCount = (this.prefabVertexCount = this.prefabGeometry.vertices.length);
+  var prefabIndices = [];
+
+  for (var h = 0; h < prefabFaceCount; h++) {
+    var face = this.prefabGeometry.faces[h];
+    prefabIndices.push(face.a, face.b, face.c);
+  }
+
+  var indexBuffer = new Uint32Array(this.prefabCount * prefabIndexCount);
+  var positionBuffer = new Float32Array(
+    this.prefabCount * prefabVertexCount * 3
+  );
 };
