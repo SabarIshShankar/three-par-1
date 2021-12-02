@@ -339,3 +339,30 @@ THREE.BAS.PrefabBufferGeometry.prototype.bufferUvs = function () {
     }
   }
 };
+
+THREE.BAS.PrefabBufferGeometry.prototype.computerVertexNormals = function () {
+  var index = this.index;
+  var attributes = this.attributes;
+  var positions = attributes.position.array;
+
+  if (attributes.normal === undefined) {
+    this.addAttributes(
+      "normal",
+      new THREE.BufferAttribute(new Float32Array(positions.length), 3)
+    );
+  }
+
+  var normals = attributes.normal.array;
+
+  var vA,
+    vB,
+    vC,
+    pA = new THREE.Vector3(),
+    pB = new THREE.Vector3(),
+    pC = new THREE.Vector3(),
+    cb = new THREE.Vector3(),
+    ab = new THREE.Vector3();
+
+  var indices = index.array;
+  var prefabIndexCount = this.prefabGeometry.faces.length * 3;
+};
