@@ -4,7 +4,7 @@ var mControls;
 
 var mScene;
 
-var mParticleCount = 100000; // <-- change this number!
+var mParticleCount = 100000;
 var mParticleSystem;
 
 var mTime = 0.0;
@@ -61,7 +61,6 @@ function initParticleSystem() {
 
   bufferGeometry.computeVertexNormals();
 
-  // generate additional geometry data
   var aOffset = bufferGeometry.createAttribute("aOffset", 1);
   var aStartPosition = bufferGeometry.createAttribute("aStartPosition", 3);
   var aControlPoint1 = bufferGeometry.createAttribute("aControlPoint1", 3);
@@ -71,8 +70,6 @@ function initParticleSystem() {
   var aColor = bufferGeometry.createAttribute("color", 3);
 
   var i, j, offset;
-
-  // buffer time offset
   var delay;
 
   for (i = 0, offset = 0; i < mParticleCount; i++) {
@@ -83,7 +80,6 @@ function initParticleSystem() {
     }
   }
 
-  // buffer start positions
   var x, y, z;
 
   for (i = 0, offset = 0; i < mParticleCount; i++) {
@@ -97,8 +93,6 @@ function initParticleSystem() {
       aStartPosition.array[offset++] = z;
     }
   }
-
-  // buffer control points
 
   for (i = 0, offset = 0; i < mParticleCount; i++) {
     x = THREE.Math.randFloat(-400, 400);
@@ -124,8 +118,6 @@ function initParticleSystem() {
     }
   }
 
-  // buffer end positions
-
   for (i = 0, offset = 0; i < mParticleCount; i++) {
     x = 1000;
     y = 0;
@@ -138,7 +130,6 @@ function initParticleSystem() {
     }
   }
 
-  // buffer axis angle
   var axis = new THREE.Vector3();
   var angle = 0;
 
@@ -158,7 +149,6 @@ function initParticleSystem() {
     }
   }
 
-  // buffer color
   var color = new THREE.Color();
   var h, s, l;
 
@@ -177,7 +167,6 @@ function initParticleSystem() {
   }
 
   var material = new THREE.BAS.PhongAnimationMaterial(
-    // custom parameters & THREE.MeshPhongMaterial parameters
     {
       vertexColors: THREE.VertexColors,
       shading: THREE.FlatShading,
@@ -214,7 +203,7 @@ function initParticleSystem() {
         "transformed += cubicBezier(aStartPosition, aControlPoint1, aControlPoint2, aEndPosition, tProgress);"
       ]
     },
-    // THREE.MeshPhongMaterial uniforms
+
     {
       specular: 0xff0000,
       shininess: 20
@@ -222,8 +211,7 @@ function initParticleSystem() {
   );
 
   mParticleSystem = new THREE.Mesh(bufferGeometry, material);
-  // because the bounding box of the particle system does not reflect its on-screen size
-  // set this to false to prevent the whole thing from disappearing on certain angles
+
   mParticleSystem.frustumCulled = false;
 
   mScene.add(mParticleSystem);
@@ -256,10 +244,6 @@ function resize() {
   mRenderer.setSize(window.innerWidth, window.innerHeight);
 }
 
-/////////////////////////////
-// buffer animation system
-/////////////////////////////
-
 THREE.BAS = {};
 
 THREE.BAS.ShaderChunk = {};
@@ -284,4 +268,9 @@ THREE.BAS.ShaderChunk["quaternion_rotation"] =
 
 THREE.BAS.PrefabBufferGeometry = function (prefab, count) {
   THREE.BufferGeometry.call(this);
+
+  this.prefabGeometry = prefab;
+  this.prefabCount = count;
+  this.prefabVertexCount = prefab.vertices.length;
+  this.bufferDefaults();
 };
