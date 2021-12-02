@@ -315,3 +315,18 @@ THREE.BAS.PrefabBufferGeometry.prototype.bufferDefaults = function () {
     }
   }
 };
+
+THREE.BAS.PrefabBufferGeometry.prototype.bufferUvs = function () {
+  var prefabFaceCount = this.prefabGeometry.faces.length;
+  var prefabVertexCount = (this.prefabVertexCount = this.prefabGeometry.vertices.length);
+  var prefabUvs = [];
+
+  for (var h = 0; h < prefabFaceCount; h++) {
+    var face = this.prefabGeometry.faces[h];
+    var uv = this.prefabGeometry.faceVertexUvs[0][h];
+
+    prefabUvs[face.a] = uv[0];
+    prefabUvs[face.b] = uv[1];
+    prefabUvs[face.c] = uv[2];
+  }
+};
