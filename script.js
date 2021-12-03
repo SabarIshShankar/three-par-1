@@ -374,5 +374,27 @@ THREE.BAS.PrefabBufferGeometry.prototype.computerVertexNormals = function () {
     pA.fromArray(positions, vA);
     pB.fromArray(positions, vB);
     pC.fromArray(positions, vC);
+
+    cb.subVectors(pC, pB);
+    ab.subVectors(pA, pB);
+    cb.cross(ab);
+
+    normals[vA] += cb.x;
+    normals[vA + 1] += cb.y;
+    normals[vA + 2] += cb.z;
+
+    normals[vB] += cb.x;
+    normals[vB + 1] += cb.y;
+    normals[vB + 2] += cb.z;
+
+    normals[vC] += cb.x;
+    normals[vC + 1] += cb.y;
+    normals[vC + 2] += cb.z;
+  }
+
+  for(var j = 1; j< this.prefabCount; j++){
+    for(var k = 0; k<prefabIndexCount; k++){
+      normals[j * prefabIndexCount + k] = normals[k];
+    }
   }
 };
