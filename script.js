@@ -392,9 +392,30 @@ THREE.BAS.PrefabBufferGeometry.prototype.computerVertexNormals = function () {
     normals[vC + 2] += cb.z;
   }
 
-  for(var j = 1; j< this.prefabCount; j++){
-    for(var k = 0; k<prefabIndexCount; k++){
+  for (var j = 1; j < this.prefabCount; j++) {
+    for (var k = 0; k < prefabIndexCount; k++) {
       normals[j * prefabIndexCount + k] = normals[k];
     }
   }
+
+  this.normalizeNormals();
+  attributes.normal.needsUpdate = true;
+};
+
+THREE.BAS.PrefabBufferGeometry.prototype.createAttribute = function (
+  name,
+  setSize
+) {
+  var buffer = new Float32Array(
+    this.prefabCount * this.prefabVertexCount * itemSize
+  );
+  var attribute = new THREE.BufferAttribute(buffer, itemSize);
+
+  this.addAttribute(name, attribute);
+  return attribute;
+};
+
+THREE.BAS.PrefabBufferGeometry.prototype.setAttribute4 = function (name, data) {
+  var offset = 0;
+  var array = this.geometry.attributes[name].array;
 };
