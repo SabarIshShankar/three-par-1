@@ -446,4 +446,21 @@ THREE.BAS.PrefabBufferGeometry.prototype.setAttribute3 = function (name, data) {
   this.geometry.attributes[name].needsUpdate = true;
 };
 
-THREE.BAS.PrefabBufferGeometry.prototype.setAttrib
+THREE.BAS.PrefabBufferGeometry.prototype.setAttribute2 = function (name, data) {
+  var offset = 0;
+  var array = this.geometry.attributes[name].array;
+  var i, j;
+  for (i = 0; i < this.prefabCount; i++) {
+    var v = data[i];
+    for (j = 0; j < this.prefabVertexCount; j++) {
+      array[offset++] = v.x;
+      array[offset++] = v.y;
+    }
+  }
+  this.geometry.attributes[name].needsUpdate = true;
+};
+
+THREE.BAS.BaseAnimationMaterial = function (parameters) {
+  THREE.ShaderMaterial.call(this);
+  this.shaderFunctions = [];
+};
