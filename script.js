@@ -490,3 +490,11 @@ THREE.BAS.BaseAnimationMaterial.prototype._concatParameters = function () {
 THREE.BAS.BaseAnimationMaterial.prototype._concatVertexInit = function () {
   return this.shaderVextexInit.join("\n");
 };
+
+THREE.BAS.BaseAnimationMaterial.prototype._concatTransformNormal = function () {
+  return this.shaderTransformNormal.join("\n");
+};
+
+THREE.BAS.BaseAnimationMaterial.prototype._concatTranformPosition = function () {
+  return this.shaderTransformPosition.join("\n");
+};
