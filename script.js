@@ -463,4 +463,30 @@ THREE.BAS.PrefabBufferGeometry.prototype.setAttribute2 = function (name, data) {
 THREE.BAS.BaseAnimationMaterial = function (parameters) {
   THREE.ShaderMaterial.call(this);
   this.shaderFunctions = [];
+  this.shaderParameters = [];
+  this.shaderVertexInit = [];
+  this.shaderTransformNormal = [];
+  this.shaderTransformPosition = [];
+  this.setValues(parameters);
+};
+THREE.BAS.BaseAnimationMaterial.prototype = Object.create(
+  THREE.ShaderMaterial.prototype
+);
+THREE.BAS.BaseAnimationMaterial.prototype.constructor =
+  THREE.BAS.BaseAnimationMaterial;
+
+THREE.BAS.BaseAnimationMaterial.prototype._concatVertexShader = function () {
+  return "";
+};
+
+THREE.BAS.BaseAnimationMaterial.prototype._concatFunctions = function () {
+  return this.shaderFunctions.join("\n");
+};
+
+THREE.BAS.BaseAnimationMaterial.prototype._concatParameters = function () {
+  return this.shaderParameters.join("\n");
+};
+
+THREE.BAS.BaseAnimationMaterial.prototype._concatVertexInit = function () {
+  return this.shaderVextexInit.join("\n");
 };
