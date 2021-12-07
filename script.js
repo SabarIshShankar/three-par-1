@@ -521,3 +521,18 @@ THREE.BAS.BaseAnimationMaterial.prototype.setUniformValues = function (values) {
     }
   }
 };
+
+THREE.BAS.PhongAnimationMateril = function (parameters, uniformValues) {
+  THREE.BAS.BaseAnimationMaterial.call(this, parameters);
+  var phongShader = THREE.ShaderLib["phong"];
+  this.uniforms = THREE.UniformsUtils.merge([
+    phongShader.uniforms,
+    this.uniforms
+  ]);
+
+  this.lights = true;
+  this.vertexShader = this._concatVertexShader();
+  this.fragmenthader = phongShader.fragmentShader;
+  uniformValues.normalMap && (this.defines["USE_NORMALMAP"] = "");
+  this.setUniformValues(uniformValues);
+};
