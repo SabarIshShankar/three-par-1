@@ -581,6 +581,19 @@ THREE.BAS.PhongAnimationMaterial.prototype._concatVertexShader = function () {
     "vNormal = normalize(transformedNormal);",
     "#endif",
     THREE.ShaderChunk["begin_vertex"],
-    this._concatTranformPosition()
-  ];
+    this._concatTranformPosition(),
+
+    THREE.ShaderChunk["displacementmap_vertex"],
+    THREE.ShaderChunk["morphtarget_vertex"],
+    THREE.ShaderChunk["skinning_vertex"],
+    THREE.ShaderChunk["project_vertex"],
+    THREE.ShaderChunk["logdethbuf_vertex"],
+    "vVuewPosition = -mvPosition.xyz;",
+
+    THREE.ShaderChunk["worldpos_vertex"],
+    THREE.ShaderChunk["envmap_vertex"],
+    THREE.ShaderChunk["lights_phong_vertex"],
+    THREE.ShaderChunk["shadowmap_vertex"],
+    "}"
+  ].join("\n");
 };
