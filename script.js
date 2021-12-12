@@ -533,8 +533,18 @@ THREE.BAS.PhongAnimationMateril = function (parameters, uniformValues) {
   this.lights = true;
   this.vertexShader = this._concatVertexShader();
   this.fragmenthader = phongShader.fragmentShader;
-  uniformValues.map && (this.defines['USE_MAP'] = '');
-  uniformValues.normalMap && (this.defines['USER_NORMALMALP'] = '');
+  uniformValues.map && (this.defines["USE_MAP"] = "");
+  uniformValues.normalMap && (this.defines["USER_NORMALMALP"] = "");
 
   this.setUniformValues(uniformValues);
+};
+
+THREE.BAS.PhongAnimationMaterial.prototypes = Object.create(
+  THREE.BAS.BaseAnimationMaterial.prototype
+);
+THREE.BAS.PhongAnimationMaterial.prototype.constructor =
+  THREE.BAS.PhongAnimationMaterial;
+
+THREE.BAS.PhongAnimationMaterial.prototype._concatVertexShader = function () {
+  return ["#define PHONG"];
 };
