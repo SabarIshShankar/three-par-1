@@ -546,5 +546,13 @@ THREE.BAS.PhongAnimationMaterial.prototype.constructor =
   THREE.BAS.PhongAnimationMaterial;
 
 THREE.BAS.PhongAnimationMaterial.prototype._concatVertexShader = function () {
-  return ["#define PHONG"];
+  return [
+    "#define PHONG",
+    "varying vec3 vViewPosition;",
+    "varying vec3 vNoramal;",
+    "#endif",
+
+    THREE.ShaderChunk["common"],
+    THREE.ShaderChunk["uv_pars_vertex"]
+  ];
 };
