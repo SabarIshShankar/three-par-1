@@ -533,6 +533,8 @@ THREE.BAS.PhongAnimationMateril = function (parameters, uniformValues) {
   this.lights = true;
   this.vertexShader = this._concatVertexShader();
   this.fragmenthader = phongShader.fragmentShader;
-  uniformValues.normalMap && (this.defines["USE_NORMALMAP"] = "");
+  uniformValues.map && (this.defines['USE_MAP'] = '');
+  uniformValues.normalMap && (this.defines['USER_NORMALMALP'] = '');
+
   this.setUniformValues(uniformValues);
 };
