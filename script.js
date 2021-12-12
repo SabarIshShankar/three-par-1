@@ -553,6 +553,15 @@ THREE.BAS.PhongAnimationMaterial.prototype._concatVertexShader = function () {
     "#endif",
 
     THREE.ShaderChunk["common"],
-    THREE.ShaderChunk["uv_pars_vertex"]
+    THREE.ShaderChunk["uv_pars_vertex"],
+    THREE.ShaderChunk["uv2_pars_vertex"],
+    THREE.ShaderChunk["displacementmap_pars_vertex"],
+    THREE.ShaderChunk["envmap_pars_vertex"],
+    THREE.ShaderChunk["lights_phong_pars_vertex"],
+    THREE.ShaderChunk["color_pars_vertex"],
+    THREE.ShaderChunk["morphtarget_pars_vertex"],
+    THREE.ShaderChunk["skinning_pars_vertex"],
+    THREE.ShaderChunk["shadowmap_pars_vertex"],
+    THREE.ShaderChunk["logdeothbuf_pars_vertex"]
   ];
 };
