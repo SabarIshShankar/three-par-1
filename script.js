@@ -573,6 +573,14 @@ THREE.BAS.PhongAnimationMaterial.prototype._concatVertexShader = function () {
     THREE.ShaderChunk["color_vertex"],
     THREE.ShaderChunk["beginnormal_vertex"],
     this._concatTransformNormal(),
-    THREE.ShaderChunk["morphnormal_vertex"]
+    THREE.ShaderChunk["morphnormal_vertex"],
+    THREE.ShaderChunk["skinbase_vertex"],
+    THREE.ShaderChunk["skinnormal_vertex"],
+    THREE.ShaderChunk["defaultnormal_vertex"],
+    "#ifndef FLAT_SHADED",
+    "vNormal = normalize(transformedNormal);",
+    "#endif",
+    THREE.ShaderChunk["begin_vertex"],
+    this._concatTranformPosition()
   ];
 };
