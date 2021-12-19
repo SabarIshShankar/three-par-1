@@ -8,7 +8,7 @@ var mParticleCount = 100000;
 var mParticleSystem;
 
 var mTime = 0.0;
-var mTimeStep = 1 / 60;
+var mTimeStep = (1/60);
 var mDuration = 20;
 
 window.onload = function () {
@@ -21,22 +21,17 @@ function init() {
   initParticleSystem();
 
   requestAnimationFrame(tick);
-  window.addEventListener("resize", resize, false);
+  window.addEventListener('resize', resize, false);
 }
 
 function initTHREE() {
-  mRenderer = new THREE.WebGLRenderer({ antialias: true });
+  mRenderer = new THREE.WebGLRenderer({antialias: true});
   mRenderer.setSize(window.innerWidth, window.innerHeight);
 
-  mContainer = document.getElementById("three-container");
+  mContainer = document.getElementById('three-container');
   mContainer.appendChild(mRenderer.domElement);
 
-  mCamera = new THREE.PerspectiveCamera(
-    60,
-    window.innerWidth / window.innerHeight,
-    0.1,
-    5000
-  );
+  mCamera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 5000);
   mCamera.position.set(0, 600, 600);
 
   mScene = new THREE.Scene();
@@ -54,26 +49,26 @@ function initControls() {
 
 function initParticleSystem() {
   var prefabGeometry = new THREE.PlaneGeometry(4, 4);
-  var bufferGeometry = new THREE.BAS.PrefabBufferGeometry(
-    prefabGeometry,
-    mParticleCount
-  );
+  var bufferGeometry = new THREE.BAS.PrefabBufferGeometry(prefabGeometry, mParticleCount);
 
   bufferGeometry.computeVertexNormals();
 
-  var aOffset = bufferGeometry.createAttribute("aOffset", 1);
-  var aStartPosition = bufferGeometry.createAttribute("aStartPosition", 3);
-  var aControlPoint1 = bufferGeometry.createAttribute("aControlPoint1", 3);
-  var aControlPoint2 = bufferGeometry.createAttribute("aControlPoint2", 3);
-  var aEndPosition = bufferGeometry.createAttribute("aEndPosition", 3);
-  var aAxisAngle = bufferGeometry.createAttribute("aAxisAngle", 4);
-  var aColor = bufferGeometry.createAttribute("color", 3);
+
+  var aOffset = bufferGeometry.createAttribute('aOffset', 1);
+  var aStartPosition = bufferGeometry.createAttribute('aStartPosition', 3);
+  var aControlPoint1 = bufferGeometry.createAttribute('aControlPoint1', 3);
+  var aControlPoint2 = bufferGeometry.createAttribute('aControlPoint2', 3);
+  var aEndPosition = bufferGeometry.createAttribute('aEndPosition', 3);
+  var aAxisAngle = bufferGeometry.createAttribute('aAxisAngle', 4);
+  var aColor = bufferGeometry.createAttribute('color', 3);
 
   var i, j, offset;
+
+
   var delay;
 
   for (i = 0, offset = 0; i < mParticleCount; i++) {
-    delay = (i / mParticleCount) * mDuration;
+    delay = i / mParticleCount * mDuration;
 
     for (j = 0; j < prefabGeometry.vertices.length; j++) {
       aOffset.array[offset++] = delay;
@@ -93,6 +88,7 @@ function initParticleSystem() {
       aStartPosition.array[offset++] = z;
     }
   }
+
 
   for (i = 0, offset = 0; i < mParticleCount; i++) {
     x = THREE.Math.randFloat(-400, 400);
@@ -118,6 +114,7 @@ function initParticleSystem() {
     }
   }
 
+
   for (i = 0, offset = 0; i < mParticleCount; i++) {
     x = 1000;
     y = 0;
@@ -129,6 +126,7 @@ function initParticleSystem() {
       aEndPosition.array[offset++] = z;
     }
   }
+
 
   var axis = new THREE.Vector3();
   var angle = 0;
@@ -149,6 +147,7 @@ function initParticleSystem() {
     }
   }
 
+
   var color = new THREE.Color();
   var h, s, l;
 
@@ -166,41 +165,43 @@ function initParticleSystem() {
     }
   }
 
+
   var material = new THREE.BAS.PhongAnimationMaterial(
+
     {
       vertexColors: THREE.VertexColors,
       shading: THREE.FlatShading,
       side: THREE.DoubleSide,
       uniforms: {
-        uTime: { type: "f", value: 0 },
-        uDuration: { type: "f", value: mDuration }
+        uTime: {type: 'f', value: 0},
+        uDuration: {type: 'f', value: mDuration}
       },
       shaderFunctions: [
-        THREE.BAS.ShaderChunk["quaternion_rotation"],
-        THREE.BAS.ShaderChunk["cubic_bezier"]
+        THREE.BAS.ShaderChunk['quaternion_rotation'],
+        THREE.BAS.ShaderChunk['cubic_bezier']
       ],
       shaderParameters: [
-        "uniform float uTime;",
-        "uniform float uDuration;",
-        "attribute float aOffset;",
-        "attribute vec3 aStartPosition;",
-        "attribute vec3 aControlPoint1;",
-        "attribute vec3 aControlPoint2;",
-        "attribute vec3 aEndPosition;",
-        "attribute vec4 aAxisAngle;"
+        'uniform float uTime;',
+        'uniform float uDuration;',
+        'attribute float aOffset;',
+        'attribute vec3 aStartPosition;',
+        'attribute vec3 aControlPoint1;',
+        'attribute vec3 aControlPoint2;',
+        'attribute vec3 aEndPosition;',
+        'attribute vec4 aAxisAngle;'
       ],
       shaderVertexInit: [
-        "float tProgress = mod((uTime + aOffset), uDuration) / uDuration;",
+        'float tProgress = mod((uTime + aOffset), uDuration) / uDuration;',
 
-        "float angle = aAxisAngle.w * tProgress;",
-        "vec4 tQuat = quatFromAxisAngle(aAxisAngle.xyz, angle);"
+        'float angle = aAxisAngle.w * tProgress;',
+        'vec4 tQuat = quatFromAxisAngle(aAxisAngle.xyz, angle);'
       ],
       shaderTransformNormal: [
-        "objectNormal = rotateVector(tQuat, objectNormal);"
+        'objectNormal = rotateVector(tQuat, objectNormal);'
       ],
       shaderTransformPosition: [
-        "transformed = rotateVector(tQuat, transformed);",
-        "transformed += cubicBezier(aStartPosition, aControlPoint1, aControlPoint2, aEndPosition, tProgress);"
+        'transformed = rotateVector(tQuat, transformed);',
+        'transformed += cubicBezier(aStartPosition, aControlPoint1, aControlPoint2, aEndPosition, tProgress);'
       ]
     },
 
@@ -211,7 +212,6 @@ function initParticleSystem() {
   );
 
   mParticleSystem = new THREE.Mesh(bufferGeometry, material);
-
   mParticleSystem.frustumCulled = false;
 
   mScene.add(mParticleSystem);
@@ -230,7 +230,7 @@ function tick() {
 function update() {
   mControls.update();
 
-  mParticleSystem.material.uniforms["uTime"].value = mTime;
+  mParticleSystem.material.uniforms['uTime'].value = mTime;
 }
 
 function render() {
@@ -244,27 +244,24 @@ function resize() {
   mRenderer.setSize(window.innerWidth, window.innerHeight);
 }
 
+
+
 THREE.BAS = {};
 
 THREE.BAS.ShaderChunk = {};
 
-THREE.BAS.ShaderChunk["animation_time"] =
-  "float tDelay = aAnimation.x;\nfloat tDuration = aAnimation.y;\nfloat tTime = clamp(uTime - tDelay, 0.0, tDuration);\nfloat tProgress = ease(tTime, 0.0, 1.0, tDuration);\n";
+THREE.BAS.ShaderChunk["animation_time"] = "float tDelay = aAnimation.x;\nfloat tDuration = aAnimation.y;\nfloat tTime = clamp(uTime - tDelay, 0.0, tDuration);\nfloat tProgress = ease(tTime, 0.0, 1.0, tDuration);\n";
 
-THREE.BAS.ShaderChunk["cubic_bezier"] =
-  "vec3 cubicBezier(vec3 p0, vec3 c0, vec3 c1, vec3 p1, float t)\n{\n    vec3 tp;\n    float tn = 1.0 - t;\n\n    tp.xyz = tn * tn * tn * p0.xyz + 3.0 * tn * tn * t * c0.xyz + 3.0 * tn * t * t * c1.xyz + t * t * t * p1.xyz;\n\n    return tp;\n}\n";
+THREE.BAS.ShaderChunk["cubic_bezier"] = "vec3 cubicBezier(vec3 p0, vec3 c0, vec3 c1, vec3 p1, float t)\n{\n    vec3 tp;\n    float tn = 1.0 - t;\n\n    tp.xyz = tn * tn * tn * p0.xyz + 3.0 * tn * tn * t * c0.xyz + 3.0 * tn * t * t * c1.xyz + t * t * t * p1.xyz;\n\n    return tp;\n}\n";
 
-THREE.BAS.ShaderChunk["ease_in_cubic"] =
-  "float ease(float t, float b, float c, float d) {\n  return c*(t/=d)*t*t + b;\n}\n";
+THREE.BAS.ShaderChunk["ease_in_cubic"] = "float ease(float t, float b, float c, float d) {\n  return c*(t/=d)*t*t + b;\n}\n";
 
-THREE.BAS.ShaderChunk["ease_in_quad"] =
-  "float ease(float t, float b, float c, float d) {\n  return c*(t/=d)*t + b;\n}\n";
+THREE.BAS.ShaderChunk["ease_in_quad"] = "float ease(float t, float b, float c, float d) {\n  return c*(t/=d)*t + b;\n}\n";
 
-THREE.BAS.ShaderChunk["ease_out_cubic"] =
-  "float ease(float t, float b, float c, float d) {\n  return c*((t=t/d - 1.0)*t*t + 1.0) + b;\n}\n";
+THREE.BAS.ShaderChunk["ease_out_cubic"] = "float ease(float t, float b, float c, float d) {\n  return c*((t=t/d - 1.0)*t*t + 1.0) + b;\n}\n";
 
-THREE.BAS.ShaderChunk["quaternion_rotation"] =
-  "vec3 rotateVector(vec4 q, vec3 v)\n{\n    return v + 2.0 * cross(q.xyz, cross(q.xyz, v) + q.w * v);\n}\n\nvec4 quatFromAxisAngle(vec3 axis, float angle)\n{\n    float halfAngle = angle * 0.5;\n    return vec4(axis.xyz * sin(halfAngle), cos(halfAngle));\n}\n";
+THREE.BAS.ShaderChunk["quaternion_rotation"] = "vec3 rotateVector(vec4 q, vec3 v)\n{\n    return v + 2.0 * cross(q.xyz, cross(q.xyz, v) + q.w * v);\n}\n\nvec4 quatFromAxisAngle(vec3 axis, float angle)\n{\n    float halfAngle = angle * 0.5;\n    return vec4(axis.xyz * sin(halfAngle), cos(halfAngle));\n}\n";
+
 
 THREE.BAS.PrefabBufferGeometry = function (prefab, count) {
   THREE.BufferGeometry.call(this);
@@ -272,20 +269,18 @@ THREE.BAS.PrefabBufferGeometry = function (prefab, count) {
   this.prefabGeometry = prefab;
   this.prefabCount = count;
   this.prefabVertexCount = prefab.vertices.length;
+
   this.bufferDefaults();
 };
-
-THREE.BAS.PrefabBufferGeometry.prototype = Object.create(
-  THREE.BufferGeometry.prototype
-);
-THREE.BAS.PrefabBufferGeometry.prototype.constructor =
-  THREE.BAS.PrefabBufferGeometry;
+THREE.BAS.PrefabBufferGeometry.prototype = Object.create(THREE.BufferGeometry.prototype);
+THREE.BAS.PrefabBufferGeometry.prototype.constructor = THREE.BAS.PrefabBufferGeometry;
 
 THREE.BAS.PrefabBufferGeometry.prototype.bufferDefaults = function () {
   var prefabFaceCount = this.prefabGeometry.faces.length;
-  var prefabIndexCount = this.prefabGeometry.face.length * 3;
-  var prefabVertexCount = (this.prefabVertexCount = this.prefabGeometry.vertices.length);
+  var prefabIndexCount = this.prefabGeometry.faces.length * 3;
+  var prefabVertexCount = this.prefabVertexCount = this.prefabGeometry.vertices.length;
   var prefabIndices = [];
+
 
   for (var h = 0; h < prefabFaceCount; h++) {
     var face = this.prefabGeometry.faces[h];
@@ -293,32 +288,30 @@ THREE.BAS.PrefabBufferGeometry.prototype.bufferDefaults = function () {
   }
 
   var indexBuffer = new Uint32Array(this.prefabCount * prefabIndexCount);
-  var positionBuffer = new Float32Array(
-    this.prefabCount * prefabVertexCount * 3
-  );
+  var positionBuffer = new Float32Array(this.prefabCount * prefabVertexCount * 3);
 
   this.setIndex(new THREE.BufferAttribute(indexBuffer, 1));
-  this.addAttribute("position", new THREE.BufferAttribute(positionBuffer, 3));
+  this.addAttribute('position', new THREE.BufferAttribute(positionBuffer, 3));
 
-  for (var i = 0, offset; i < this.prefabCount; i++) {
+  for (var i = 0, offset = 0; i < this.prefabCount; i++) {
     for (var j = 0; j < prefabVertexCount; j++, offset += 3) {
       var prefabVertex = this.prefabGeometry.vertices[j];
 
-      positionBuffer[offset] = prefabVertex.x;
+      positionBuffer[offset    ] = prefabVertex.x;
       positionBuffer[offset + 1] = prefabVertex.y;
       positionBuffer[offset + 2] = prefabVertex.z;
     }
 
     for (var k = 0; k < prefabIndexCount; k++) {
-      indexBuffer[i * prefabIndexCount + k] =
-        prefabIndices[k] + i * prefabVertexCount;
+      indexBuffer[i * prefabIndexCount + k] = prefabIndices[k] + i * prefabVertexCount;
     }
   }
 };
 
-THREE.BAS.PrefabBufferGeometry.prototype.bufferUvs = function () {
+
+THREE.BAS.PrefabBufferGeometry.prototype.bufferUvs = function() {
   var prefabFaceCount = this.prefabGeometry.faces.length;
-  var prefabVertexCount = (this.prefabVertexCount = this.prefabGeometry.vertices.length);
+  var prefabVertexCount = this.prefabVertexCount = this.prefabGeometry.vertices.length;
   var prefabUvs = [];
 
   for (var h = 0; h < prefabFaceCount; h++) {
@@ -330,38 +323,41 @@ THREE.BAS.PrefabBufferGeometry.prototype.bufferUvs = function () {
     prefabUvs[face.c] = uv[2];
   }
 
-  var uvBuffer = this.createAttribute("uv", 2);
+  var uvBuffer = this.createAttribute('uv', 2);
+
   for (var i = 0, offset = 0; i < this.prefabCount; i++) {
     for (var j = 0; j < prefabVertexCount; j++, offset += 2) {
       var prefabUv = prefabUvs[j];
+
       uvBuffer.array[offset] = prefabUv.x;
       uvBuffer.array[offset + 1] = prefabUv.y;
     }
   }
 };
 
-THREE.BAS.PrefabBufferGeometry.prototype.computerVertexNormals = function () {
+/**
+ * based on BufferGeometry.computeVertexNormals
+ * calculate vertex normals for a prefab, and repeat the data in the normal buffer
+ */
+THREE.BAS.PrefabBufferGeometry.prototype.computeVertexNormals = function () {
   var index = this.index;
   var attributes = this.attributes;
   var positions = attributes.position.array;
 
   if (attributes.normal === undefined) {
-    this.addAttributes(
-      "normal",
-      new THREE.BufferAttribute(new Float32Array(positions.length), 3)
-    );
+    this.addAttribute('normal', new THREE.BufferAttribute(new Float32Array(positions.length), 3));
   }
 
   var normals = attributes.normal.array;
 
-  var vA,
-    vB,
-    vC,
-    pA = new THREE.Vector3(),
-    pB = new THREE.Vector3(),
-    pC = new THREE.Vector3(),
-    cb = new THREE.Vector3(),
-    ab = new THREE.Vector3();
+  var vA, vB, vC,
+
+  pA = new THREE.Vector3(),
+  pB = new THREE.Vector3(),
+  pC = new THREE.Vector3(),
+
+  cb = new THREE.Vector3(),
+  ab = new THREE.Vector3();
 
   var indices = index.array;
   var prefabIndexCount = this.prefabGeometry.faces.length * 3;
@@ -399,19 +395,16 @@ THREE.BAS.PrefabBufferGeometry.prototype.computerVertexNormals = function () {
   }
 
   this.normalizeNormals();
+
   attributes.normal.needsUpdate = true;
 };
 
-THREE.BAS.PrefabBufferGeometry.prototype.createAttribute = function (
-  name,
-  setSize
-) {
-  var buffer = new Float32Array(
-    this.prefabCount * this.prefabVertexCount * itemSize
-  );
+THREE.BAS.PrefabBufferGeometry.prototype.createAttribute = function (name, itemSize) {
+  var buffer = new Float32Array(this.prefabCount * this.prefabVertexCount * itemSize);
   var attribute = new THREE.BufferAttribute(buffer, itemSize);
 
   this.addAttribute(name, attribute);
+
   return attribute;
 };
 
@@ -419,8 +412,10 @@ THREE.BAS.PrefabBufferGeometry.prototype.setAttribute4 = function (name, data) {
   var offset = 0;
   var array = this.geometry.attributes[name].array;
   var i, j;
+
   for (i = 0; i < data.length; i++) {
     var v = data[i];
+
     for (j = 0; j < this.prefabVertexCount; j++) {
       array[offset++] = v.x;
       array[offset++] = v.y;
@@ -428,172 +423,188 @@ THREE.BAS.PrefabBufferGeometry.prototype.setAttribute4 = function (name, data) {
       array[offset++] = v.w;
     }
   }
+
   this.geometry.attributes[name].needsUpdate = true;
 };
-
 THREE.BAS.PrefabBufferGeometry.prototype.setAttribute3 = function (name, data) {
   var offset = 0;
   var array = this.geometry.attributes[name].array;
   var i, j;
+
   for (i = 0; i < data.length; i++) {
     var v = data[i];
+
     for (j = 0; j < this.prefabVertexCount; j++) {
       array[offset++] = v.x;
       array[offset++] = v.y;
       array[offset++] = v.z;
     }
   }
+
   this.geometry.attributes[name].needsUpdate = true;
 };
-
 THREE.BAS.PrefabBufferGeometry.prototype.setAttribute2 = function (name, data) {
   var offset = 0;
   var array = this.geometry.attributes[name].array;
   var i, j;
+
   for (i = 0; i < this.prefabCount; i++) {
     var v = data[i];
+
     for (j = 0; j < this.prefabVertexCount; j++) {
       array[offset++] = v.x;
       array[offset++] = v.y;
     }
   }
+
   this.geometry.attributes[name].needsUpdate = true;
 };
 
-THREE.BAS.BaseAnimationMaterial = function (parameters) {
-  THREE.ShaderMaterial.call(this);
-  this.shaderFunctions = [];
-  this.shaderParameters = [];
-  this.shaderVertexInit = [];
-  this.shaderTransformNormal = [];
-  this.shaderTransformPosition = [];
-  this.setValues(parameters);
-};
-THREE.BAS.BaseAnimationMaterial.prototype = Object.create(
-  THREE.ShaderMaterial.prototype
-);
-THREE.BAS.BaseAnimationMaterial.prototype.constructor =
-  THREE.BAS.BaseAnimationMaterial;
+THREE.BAS.BaseAnimationMaterial = function(parameters) {
+    THREE.ShaderMaterial.call(this);
 
-THREE.BAS.BaseAnimationMaterial.prototype._concatVertexShader = function () {
-  return "";
-};
+    this.shaderFunctions = [];
+    this.shaderParameters = [];
+    this.shaderVertexInit = [];
+    this.shaderTransformNormal = [];
+    this.shaderTransformPosition = [];
 
-THREE.BAS.BaseAnimationMaterial.prototype._concatFunctions = function () {
-  return this.shaderFunctions.join("\n");
+    this.setValues(parameters);
+};
+THREE.BAS.BaseAnimationMaterial.prototype = Object.create(THREE.ShaderMaterial.prototype);
+THREE.BAS.BaseAnimationMaterial.prototype.constructor = THREE.BAS.BaseAnimationMaterial;
+
+THREE.BAS.BaseAnimationMaterial.prototype._concatVertexShader = function() {
+    return '';
 };
 
-THREE.BAS.BaseAnimationMaterial.prototype._concatParameters = function () {
-  return this.shaderParameters.join("\n");
+THREE.BAS.BaseAnimationMaterial.prototype._concatFunctions = function() {
+    return this.shaderFunctions.join('\n');
+};
+THREE.BAS.BaseAnimationMaterial.prototype._concatParameters = function() {
+    return this.shaderParameters.join('\n');
+};
+THREE.BAS.BaseAnimationMaterial.prototype._concatVertexInit = function() {
+    return this.shaderVertexInit.join('\n');
+};
+THREE.BAS.BaseAnimationMaterial.prototype._concatTransformNormal = function() {
+    return this.shaderTransformNormal.join('\n');
+};
+THREE.BAS.BaseAnimationMaterial.prototype._concatTransformPosition = function() {
+    return this.shaderTransformPosition.join('\n');
 };
 
-THREE.BAS.BaseAnimationMaterial.prototype._concatVertexInit = function () {
-  return this.shaderVextexInit.join("\n");
-};
 
-THREE.BAS.BaseAnimationMaterial.prototype._concatTransformNormal = function () {
-  return this.shaderTransformNormal.join("\n");
-};
+THREE.BAS.BaseAnimationMaterial.prototype.setUniformValues = function(values) {
+    for (var key in values) {
+        if (key in this.uniforms) {
+            var uniform = this.uniforms[key];
+            var value = values[key];
 
-THREE.BAS.BaseAnimationMaterial.prototype._concatTranformPosition = function () {
-  return this.shaderTransformPosition.join("\n");
-};
-
-THREE.BAS.BaseAnimationMaterial.prototype.setUniformValues = function (values) {
-  for (var key in values) {
-    if (key in this.uniforms) {
-      var uniform = this.uniforms[key];
-      var value = values[key];
-
-      switch (uniform.type) {
-        case "c": //color
-          uniform.value.set(value);
-          break;
-        case "v2": //vectors
-        case "v3":
-        case "v4":
-          uniform.value.copy(value);
-          break;
-        case "f": //float
-        case "t": //texture
-          uniform.value = value;
-      }
+            switch (uniform.type) {
+                case 'c': 
+                    uniform.value.set(value);
+                    break;
+                case 'v2':
+                case 'v4':
+                    uniform.value.copy(value);
+                    break;
+                case 'f': 
+                case 't': 
+                    uniform.value = value;
+            }
+        }
     }
-  }
 };
 
-THREE.BAS.PhongAnimationMateril = function (parameters, uniformValues) {
-  THREE.BAS.BaseAnimationMaterial.call(this, parameters);
-  var phongShader = THREE.ShaderLib["phong"];
-  this.uniforms = THREE.UniformsUtils.merge([
-    phongShader.uniforms,
-    this.uniforms
-  ]);
+THREE.BAS.PhongAnimationMaterial = function(parameters, uniformValues) {
+    THREE.BAS.BaseAnimationMaterial.call(this, parameters);
 
-  this.lights = true;
-  this.vertexShader = this._concatVertexShader();
-  this.fragmenthader = phongShader.fragmentShader;
-  uniformValues.map && (this.defines["USE_MAP"] = "");
-  uniformValues.normalMap && (this.defines["USER_NORMALMALP"] = "");
+    var phongShader = THREE.ShaderLib['phong'];
 
-  this.setUniformValues(uniformValues);
+    this.uniforms = THREE.UniformsUtils.merge([phongShader.uniforms, this.uniforms]);
+    this.lights = true;
+    this.vertexShader = this._concatVertexShader();
+    this.fragmentShader = phongShader.fragmentShader;
+
+
+    uniformValues.map && (this.defines['USE_MAP'] = '');
+    uniformValues.normalMap && (this.defines['USE_NORMALMAP'] = '');
+
+    this.setUniformValues(uniformValues);
 };
+THREE.BAS.PhongAnimationMaterial.prototype = Object.create(THREE.BAS.BaseAnimationMaterial.prototype);
+THREE.BAS.PhongAnimationMaterial.prototype.constructor = THREE.BAS.PhongAnimationMaterial;
 
-THREE.BAS.PhongAnimationMaterial.prototypes = Object.create(
-  THREE.BAS.BaseAnimationMaterial.prototype
-);
-THREE.BAS.PhongAnimationMaterial.prototype.constructor =
-  THREE.BAS.PhongAnimationMaterial;
+THREE.BAS.PhongAnimationMaterial.prototype._concatVertexShader = function() {
 
-THREE.BAS.PhongAnimationMaterial.prototype._concatVertexShader = function () {
-  return [
-    "#define PHONG",
-    "varying vec3 vViewPosition;",
-    "varying vec3 vNoramal;",
-    "#endif",
+    return [
+        "#define PHONG",
 
-    THREE.ShaderChunk["common"],
-    THREE.ShaderChunk["uv_pars_vertex"],
-    THREE.ShaderChunk["uv2_pars_vertex"],
-    THREE.ShaderChunk["displacementmap_pars_vertex"],
-    THREE.ShaderChunk["envmap_pars_vertex"],
-    THREE.ShaderChunk["lights_phong_pars_vertex"],
-    THREE.ShaderChunk["color_pars_vertex"],
-    THREE.ShaderChunk["morphtarget_pars_vertex"],
-    THREE.ShaderChunk["skinning_pars_vertex"],
-    THREE.ShaderChunk["shadowmap_pars_vertex"],
-    THREE.ShaderChunk["logdeothbuf_pars_vertex"],
+        "varying vec3 vViewPosition;",
 
-    this._concatFunctions(),
-    this._concatParameters(),
-    "void main(){",
-    this._concatVertexInit(),
-    THREE.ShaderChunk["uv_vertex"],
-    THREE.ShaderChunk["uv2_vertex"],
-    THREE.ShaderChunk["color_vertex"],
-    THREE.ShaderChunk["beginnormal_vertex"],
-    this._concatTransformNormal(),
-    THREE.ShaderChunk["morphnormal_vertex"],
-    THREE.ShaderChunk["skinbase_vertex"],
-    THREE.ShaderChunk["skinnormal_vertex"],
-    THREE.ShaderChunk["defaultnormal_vertex"],
-    "#ifndef FLAT_SHADED",
-    "vNormal = normalize(transformedNormal);",
-    "#endif",
-    THREE.ShaderChunk["begin_vertex"],
-    this._concatTranformPosition(),
+        "#ifndef FLAT_SHADED",
 
-    THREE.ShaderChunk["displacementmap_vertex"],
-    THREE.ShaderChunk["morphtarget_vertex"],
-    THREE.ShaderChunk["skinning_vertex"],
-    THREE.ShaderChunk["project_vertex"],
-    THREE.ShaderChunk["logdethbuf_vertex"],
-    "vVuewPosition = -mvPosition.xyz;",
+        "	varying vec3 vNormal;",
 
-    THREE.ShaderChunk["worldpos_vertex"],
-    THREE.ShaderChunk["envmap_vertex"],
-    THREE.ShaderChunk["lights_phong_vertex"],
-    THREE.ShaderChunk["shadowmap_vertex"],
-    "}"
-  ].join("\n");
+        "#endif",
+
+        THREE.ShaderChunk[ "common" ],
+        THREE.ShaderChunk[ "uv_pars_vertex" ],
+        THREE.ShaderChunk[ "uv2_pars_vertex" ],
+        THREE.ShaderChunk[ "displacementmap_pars_vertex" ],
+        THREE.ShaderChunk[ "envmap_pars_vertex" ],
+        THREE.ShaderChunk[ "lights_phong_pars_vertex" ],
+        THREE.ShaderChunk[ "color_pars_vertex" ],
+        THREE.ShaderChunk[ "morphtarget_pars_vertex" ],
+        THREE.ShaderChunk[ "skinning_pars_vertex" ],
+        THREE.ShaderChunk[ "shadowmap_pars_vertex" ],
+        THREE.ShaderChunk[ "logdepthbuf_pars_vertex" ],
+
+        this._concatFunctions(),
+
+        this._concatParameters(),
+
+        "void main() {",
+
+        this._concatVertexInit(),
+
+        THREE.ShaderChunk[ "uv_vertex" ],
+        THREE.ShaderChunk[ "uv2_vertex" ],
+        THREE.ShaderChunk[ "color_vertex" ],
+        THREE.ShaderChunk[ "beginnormal_vertex" ],
+
+        this._concatTransformNormal(),
+
+        THREE.ShaderChunk[ "morphnormal_vertex" ],
+        THREE.ShaderChunk[ "skinbase_vertex" ],
+        THREE.ShaderChunk[ "skinnormal_vertex" ],
+        THREE.ShaderChunk[ "defaultnormal_vertex" ],
+
+        "#ifndef FLAT_SHADED", 
+
+        "	vNormal = normalize( transformedNormal );",
+
+        "#endif",
+
+        THREE.ShaderChunk[ "begin_vertex" ],
+
+        this._concatTransformPosition(),
+
+        THREE.ShaderChunk[ "displacementmap_vertex" ],
+        THREE.ShaderChunk[ "morphtarget_vertex" ],
+        THREE.ShaderChunk[ "skinning_vertex" ],
+        THREE.ShaderChunk[ "project_vertex" ],
+        THREE.ShaderChunk[ "logdepthbuf_vertex" ],
+
+        "	vViewPosition = - mvPosition.xyz;",
+
+        THREE.ShaderChunk[ "worldpos_vertex" ],
+        THREE.ShaderChunk[ "envmap_vertex" ],
+        THREE.ShaderChunk[ "lights_phong_vertex" ],
+        THREE.ShaderChunk[ "shadowmap_vertex" ],
+
+        "}"
+
+    ].join( "\n" );
 };
