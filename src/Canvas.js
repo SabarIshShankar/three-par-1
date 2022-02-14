@@ -91,6 +91,15 @@ export function Scene({ x, set }) {
       <Suspense fallback={null}>
         <Switch x={x} set={set} />
       </Suspense>
+      <mesh
+        receiveShadow
+        renderOrder={1000}
+        position={[0, 0, 0]}
+        rotation={[-Math.PI / 2, 0, 0]}
+      >
+        <planeGeometry args={[10, 10]} />
+        <a.shadowMaterial transparent opacity={x.to((x) => 0.1 + x * 0.2)} />
+      </mesh>
     </Canvas>
   );
 }
