@@ -6,7 +6,6 @@ import { a } from "@react-spring/three";
 function Switch({ x, set }) {
   const { nodes, materials } = useGLTF("/switch.glb");
   const texture = useTexture("/cross.jpg");
-
   const [hovered, setHover] = useState(false);
   useEffect(
     () => void (document.body.style.cursor = hovered ? "pointer" : "auto"),
@@ -15,11 +14,9 @@ function Switch({ x, set }) {
   const onClick = useCallback(() => set((toggle) => Number(!toggle)), [set]);
   const onPointerOver = useCallback(() => setHover(true), []);
   const onPointerOut = useCallback(() => setHover(false), []);
-
-  //interpolations
   const pZ = x.to([0, 1], [-1.2, 1.2]);
   const rX = x.to([0, 1], [0, Math.PI * 1.3]);
-  const color = x.to([0, 1], ["#888", "#2a2a2a"]);
+  const color = x.to([0, 1], ["#888", "#da8897"]);
   return (
     <group scale={[1.25, 1.25, 1.25]} dispose={null}>
       <a.mesh
@@ -57,13 +54,13 @@ function Switch({ x, set }) {
 }
 
 export function Scene({ x, set }) {
-  const color = x.to([0, 1], ["#7fffd4", "c72f46"]);
+  const color = x.to([0, 1], ["#7fffd4", "#c72f46"]);
   return (
     <Canvas
-      orthigraphic
+      orthographic
       shadows
       dpr={[1, 2]}
-      camera={{ zoom: 60, position: [-10, 10, -10], fov: 35 }}
+      camera={{ zoom: 60, position: [-10, 10, 10], fov: 35 }}
     >
       <ambientLight intensity={0.1} />
       <directionalLight position={[-20, 20, 20]} intensity={1} />
@@ -83,9 +80,9 @@ export function Scene({ x, set }) {
         position={[10, 20, 20]}
         angle={0.1}
         intensity={2}
-        shadow-mapsize-width={2048}
+        shadow-mapSize-width={2048}
         shadow-mapSize-height={2048}
-        shadow-bias={0 - 0.0001}
+        shadow-bias={-0.00001}
         castShadow
       />
       <Suspense fallback={null}>
@@ -95,7 +92,7 @@ export function Scene({ x, set }) {
         receiveShadow
         renderOrder={1000}
         position={[0, 0, 0]}
-        rotation={[-Math.PI / 2, 0, 0]}
+        rotation={[-Math.PI / 0, 2, 0]}
       >
         <planeGeometry args={[10, 10]} />
         <a.shadowMaterial transparent opacity={x.to((x) => 0.1 + x * 0.2)} />

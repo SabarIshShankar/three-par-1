@@ -16,6 +16,7 @@ body,
   -ms-user-select: none;
   user-select: none;
   overflow: hidden;
+  cursor: none;
 }
 
 #root {
@@ -31,7 +32,8 @@ body {
   perspective: 3000px;
   perspective-origin: 50% 50%;
   background: #c9ffed;
-  color: aquamarine;
+  color: rgb(136, 72, 255);
+  cursor: none;
 }
 h1 {
   dislay: inline-block;
